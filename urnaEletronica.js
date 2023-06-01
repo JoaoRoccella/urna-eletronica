@@ -37,150 +37,159 @@
  * a opção para encerrar a votação.
  */
 
-let codigoVoto;
-let votosTotais = 0;
-let votosCandidato1 = 0;
-let votosCandidato2 = 0;
-let votosCandidato3 = 0;
-let votosBranco = 0;
-let votosNulo = 0;
-let votosTotaisGanhador = 0;
+function urnaEletronica() {
 
-let percentualVotosCandidato1 = 0.0;
-let percentualVotosCandidato2 = 0.0;
-let percentualVotosCandidato3 = 0.0;
-let percentualVotosBranco = 0.0;
-let percentualVotosNulo = 0.0;
-let percentualGanhador = 0.0;
+    let
+        codigoVoto,
+        votosTotais = 0,
+        votosCandidato1 = 0,
+        votosCandidato2 = 0,
+        votosCandidato3 = 0,
+        votosBranco = 0,
+        votosNulo = 0,
+        votosTotaisGanhador = 0,
+        percentualGanhador = 0.0;
 
-let nomeCandidato1 = "Celso Portioli";
-let nomeCandidato2 = "Luciano Huck";
-let nomeCandidato3 = "Pedro de Lara";
-let nomeGanhador = "";
+    const
+        nomeCandidato1 = prompt("Digite o nome do 1º candidato(a):"),
+        nomeCandidato2 = prompt("Digite o nome do 2º candidato(a):"),
+        nomeCandidato3 = prompt("Digite o nome do 3º candidato(a):"),
 
-let opcaoInvalida = false;
+        senhaMesario = 789456;
 
-do {
+    let
+        nomeGanhador = "";
+
+    let
+        opcaoInvalida = false,
+        opcaoFim = 
+
+    do {
+        console.clear();
+
+        if (opcaoInvalida) {
+            console.log("** Opção inválida! \n\n");
+            opcaoInvalida = false;
+        }
+
+        console.log("** Opções de voto: \n\n");
+        console.log("1 | ", nomeCandidato1, "\n");
+        console.log("2 | ", nomeCandidato2, "\n");
+        console.log("3 | ", nomeCandidato3, "\n");
+        console.log("5 | Voto em branco \n");
+        console.log("8 | Voto nulo \n");
+        console.log("0 | Encerrar a votação \n\n");
+
+        codigoVoto = prompt("Digite agora o código do seu voto: ");
+
+        if (codigoVoto !== null) {
+            codigoVoto = parseInt(codigoVoto);
+        } else {
+            break;
+        }
+
+        switch (codigoVoto) {
+            case 0:
+                break;
+            case 1:
+                votosCandidato1++;
+                votosTotais++;
+                break;
+            case 2:
+                votosCandidato2++;
+                votosTotais++;
+                break;
+            case 3:
+                votosCandidato3++;
+                votosTotais++;
+                break;
+            case 5:
+                votosBranco++;
+                votosTotais++;
+                break;
+            case 8:
+                votosNulo++;
+                votosTotais++;
+                break;
+            default:
+                opcaoInvalida = true;
+                break;
+        }
+    } while (codigoVoto !== 0);
+
+    if (votosCandidato1 > votosCandidato2 && votosCandidato1 > votosCandidato3) {
+        nomeGanhador = nomeCandidato1;
+        votosTotaisGanhador = votosCandidato1 + votosBranco;
+    } else if (votosCandidato2 > votosCandidato1 && votosCandidato2 > votosCandidato3) {
+        nomeGanhador = nomeCandidato2;
+        votosTotaisGanhador = votosCandidato2 + votosBranco;
+    } else if (votosCandidato3 > votosCandidato1 && votosCandidato3 > votosCandidato2) {
+        nomeGanhador = nomeCandidato3;
+        votosTotaisGanhador = votosCandidato3 + votosBranco;
+    }
+
     console.clear();
 
-    if (opcaoInvalida) {
-        console.log("** Opção inválida! \n\n");
-        opcaoInvalida = false;
+    console.log("** Resultado da apuração desta urna\n\n");
+
+    if (votosTotais !== 0) {
+        percentualGanhador = (votosTotaisGanhador / votosTotais) * 100.0;
+
+        console.log("Votos totais: ", votosTotais, "\n");
+
+        console.log("Votos no candidato ",
+            nomeCandidato1,
+            ": ",
+            votosCandidato1,
+            " (",
+            (votosCandidato1 / votosTotais * 100.0).toFixed(2),
+            "%)\n"
+        );
+        console.log(
+            "Votos no candidato ",
+            nomeCandidato2,
+            ": ",
+            votosCandidato2,
+            " (",
+            (votosCandidato2 / votosTotais * 100.0).toFixed(2),
+            "%)\n"
+        );
+        console.log(
+            "Votos no candidato ",
+            nomeCandidato3,
+            ": ",
+            votosCandidato3,
+            " (",
+            (votosCandidato3 / votosTotais * 100.0).toFixed(2),
+            "%)\n"
+        );
+        console.log(
+            "Votos em branco: ",
+            votosBranco,
+            " (",
+            (votosBranco / votosTotais * 100.0).toFixed(2),
+            "%)\n"
+        );
+        console.log(
+            "Votos nulos: ",
+            votosNulo,
+            " (",
+            (votosNulo / votosTotais * 100.0).toFixed(2),
+            "%)\n\n"
+        );
+
+        console.log("** Ganhador nesta urna\n\n");
+        console.log(
+            nomeGanhador,
+            " com ",
+            votosTotaisGanhador,
+            " votos (",
+            percentualGanhador.toFixed(2),
+            "%) somados os votos em branco\n"
+        );
+
+    } else {
+        console.log("** Nenhum voto registrado\n");
     }
-
-    console.log("** Opções de voto: \n\n");
-    console.log("1 | ", nomeCandidato1, "\n");
-    console.log("2 | ", nomeCandidato2, "\n");
-    console.log("3 | ", nomeCandidato3, "\n");
-    console.log("5 | Voto em branco \n");
-    console.log("8 | Voto nulo \n");
-    console.log("0 | Encerrar a votação \n\n");
-
-    console.log(">> Digite agora o código do seu voto: ");
-    codigoVoto = parseInt(prompt());
-
-    switch (codigoVoto) {
-        case 0:
-            break;
-        case 1:
-            votosCandidato1++;
-            votosTotais++;
-            break;
-        case 2:
-            votosCandidato2++;
-            votosTotais++;
-            break;
-        case 3:
-            votosCandidato3++;
-            votosTotais++;
-            break;
-        case 5:
-            votosBranco++;
-            votosTotais++;
-            break;
-        case 8:
-            votosNulo++;
-            votosTotais++;
-            break;
-        default:
-            opcaoInvalida = true;
-    }
-} while (codigoVoto !== 0);
-
-if (votosCandidato1 > votosCandidato2 && votosCandidato1 > votosCandidato3) {
-    nomeGanhador = nomeCandidato1;
-    votosTotaisGanhador = votosCandidato1 + votosBranco;
-} else if (votosCandidato2 > votosCandidato1 && votosCandidato2 > votosCandidato3) {
-    nomeGanhador = nomeCandidato2;
-    votosTotaisGanhador = votosCandidato2 + votosBranco;
-} else if (votosCandidato3 > votosCandidato1 && votosCandidato3 > votosCandidato2) {
-    nomeGanhador = nomeCandidato3;
-    votosTotaisGanhador = votosCandidato3 + votosBranco;
 }
-
-console.clear();
-
-console.log("** Resultado da apuração desta urna\n\n");
-
-if (votosTotais !== 0) {
-    percentualGanhador = (votosTotaisGanhador / votosTotais) * 100.0;
-
-    console.log("Votos totais: ", votosTotais, "\n");
-    console.log(
-        "Votos no candidato ",
-        nomeCandidato1,
-        ": ",
-        votosCandidato1,
-        " (",
-        (votosCandidato1 / votosTotais) * 100.0,
-        "%)\n"
-    );
-    console.log(
-        "Votos no candidato ",
-        nomeCandidato2,
-        ": ",
-        votosCandidato2,
-        " (",
-        (votosCandidato2 / votosTotais) * 100.0,
-        "%)\n"
-    );
-    console.log(
-        "Votos no candidato ",
-        nomeCandidato3,
-        ": ",
-        votosCandidato3,
-        " (",
-        (votosCandidato3 / votosTotais) * 100.0,
-        "%)\n"
-    );
-    console.log(
-        "Votos em branco: ",
-        votosBranco,
-        " (",
-        (votosBranco / votosTotais) * 100.0,
-        "%)\n"
-    );
-    console.log(
-        "Votos nulos: ",
-        votosNulo,
-        " (",
-        (votosNulo / votosTotais) * 100.0,
-        "%)\n\n"
-    );
-
-    console.log("** Ganhador nesta urna\n\n");
-    console.log(
-        nomeGanhador,
-        " com ",
-        votosTotaisGanhador,
-        " votos (",
-        percentualGanhador,
-        "%) somados os votos em branco\n"
-    );
-
-} else {
-    console.log("** Nenhum voto registrado\n");
-}
-
-
 
