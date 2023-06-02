@@ -61,8 +61,7 @@ function urnaEletronica() {
         nomeGanhador = "";
 
     let
-        opcaoInvalida = false,
-        opcaoFim = 
+        opcaoInvalida = false;
 
     do {
         console.clear();
@@ -94,22 +93,27 @@ function urnaEletronica() {
             case 1:
                 votosCandidato1++;
                 votosTotais++;
+                audioConfirma();
                 break;
             case 2:
                 votosCandidato2++;
                 votosTotais++;
+                audioConfirma();
                 break;
             case 3:
                 votosCandidato3++;
                 votosTotais++;
+                audioConfirma();
                 break;
             case 5:
                 votosBranco++;
                 votosTotais++;
+                audioConfirma();
                 break;
             case 8:
                 votosNulo++;
                 votosTotais++;
+                audioConfirma();
                 break;
             default:
                 opcaoInvalida = true;
@@ -193,3 +197,7 @@ function urnaEletronica() {
     }
 }
 
+function audioConfirma() {
+    let audio = new Audio("confirmacao.mp3");
+    audio.play();
+}
