@@ -48,47 +48,60 @@ function urnaEletronica() {
         votosBranco = 0,
         votosNulo = 0,
         votosTotaisGanhador = 0,
-        percentualGanhador = 0.0;
+        percentualGanhador = 0.0,
 
-    let
         nomeCandidato1,
         nomeCandidato2,
         nomeCandidato3,
+        nomeGanhador = "",
 
-        senhaMesario = 789456;
-
-    let
-        nomeGanhador = "";
-
-    let
+        senhaMesario = 789456,
         opcaoInvalida = false,
-        iniciaVotacao = false;
-    
+        iniciaVotacao = false,
+        situacaoEmpate = false,
+        opcaoFim = "N",
+
+        dataHoraInicio,
+        dataHoraFim;
+
     do {
-        console.clear();
 
         if (opcaoInvalida) {
             console.log("Opção inválida!");
         }
 
-        console.log("** Configuração da urna");
+        nomeCandidato1 = prompt(
+            "** Configuração da urna\n\n" +
+            "Digite o nome do(a) 1º candidato(a):");
+        if (usuarioCancelou(nomeCandidato1)) {
+            break;
+        }
 
-        nomeCandidato1 = prompt("Digite o nome do(a) 1º candidato(a):");
-        nomeCandidato2 = prompt("Digite o nome do(a) 2º candidato(a):");
-        nomeCandidato3 = prompt("Digite o nome do(a) 3º candidato(a):");
+        nomeCandidato2 = prompt(
+            "** Configuração da urna\n\n" +
+            "Digite o nome do(a) 2º candidato(a):");
+        if (usuarioCancelou(nomeCandidato2)) {
+            break;
+        }
 
-        console.clear();
+        nomeCandidato3 = prompt(
+            "** Configuração da urna\n\n" +
+            "Digite o nome do(a) 3º candidato(a):");
+        if (usuarioCancelou(nomeCandidato3)) {
+            break;
+        }
 
-        console.log("** Candidatos configurados:\n");
-        console.log("| 1 | ", nomeCandidato1);
-        console.log("| 2 | ", nomeCandidato2);
-        console.log("| 3 | ", nomeCandidato3);
-        
-        console.log("** Liberação da urna:\n");
-        console.log("| L | Liberar urna para votação");
-        console.log("| C | Configurar urna novamente");
+        opcaoInicio = prompt(
+            "** Candidatos configurados:\n\n" +
+            "| 1 | " + nomeCandidato1 + "\n" +
+            "| 2 | " + nomeCandidato2 + "\n" +
+            "| 3 | " + nomeCandidato3 + "\n \n" +
 
-        opcaoInicio = prompt("Opção de liberação da urna:");
+            "** Liberação da urna: \n\n" +
+            "| L | Liberar urna para votação\n" +
+            "| C | Configurar urna novamente \n\n" +
+            "Opção de liberação da urna:"
+        );
 
         if (opcaoInicio == "L" || opcaoInicio == "l") {
             iniciaVotacao = true;
@@ -97,64 +110,79 @@ function urnaEletronica() {
         }
 
     } while (!iniciaVotacao);
-    
+
+    dataHoraInicio = dataHoraAtual();
+
     do {
-        console.clear();
 
         if (opcaoInvalida) {
-            console.log("** Opção inválida! \n\n");
+            window.alert("** Opção inválida!");
             opcaoInvalida = false;
         }
 
-        console.log("** Opções de voto: \n\n");
-        console.log("1 | ", nomeCandidato1, "\n");
-        console.log("2 | ", nomeCandidato2, "\n");
-        console.log("3 | ", nomeCandidato3, "\n");
-        console.log("5 | Voto em branco \n");
-        console.log("8 | Voto nulo \n");
-        console.log("0 | Encerrar a votação \n\n");
+        codigoVoto = prompt(
+            "** Opções de voto: \n\n" +
+            "| 1 | " + nomeCandidato1 + "\n" +
+            "| 2 | " + nomeCandidato2 + "\n" +
+            "| 3 | " + nomeCandidato3 + "\n" +
+            "| 5 | Voto em branco \n" +
+            "| 8 | Voto nulo \n\n" +
+            "Digite agora o código do seu voto:");
 
-        codigoVoto = prompt("Digite agora o código do seu voto: ");
-
-        if (codigoVoto !== null) {
+        if (!usuarioCancelou(codigoVoto)) {
             codigoVoto = parseInt(codigoVoto);
         } else {
+            console.log("Programa finalizado pelo usuário");
             break;
         }
 
         switch (codigoVoto) {
-            case 0:
+            case senhaMesario:
+
+                opcaoFim = prompt("Deseja realmente encerrar a votação? Digite \"S\" para confirmar:")
+
+                if (opcaoFim === "n" || opcaoFim === "N") {
+                    codigoVoto = -1;
+                }
+
                 break;
             case 1:
                 votosCandidato1++;
                 votosTotais++;
+                opcaoInvalida = false;
                 audioConfirmacao();
                 break;
             case 2:
                 votosCandidato2++;
                 votosTotais++;
+                opcaoInvalida = false;
                 audioConfirmacao();
                 break;
             case 3:
                 votosCandidato3++;
                 votosTotais++;
+                opcaoInvalida = false;
                 audioConfirmacao();
                 break;
             case 5:
                 votosBranco++;
                 votosTotais++;
+                opcaoInvalida = false;
                 audioConfirmacao();
                 break;
             case 8:
                 votosNulo++;
                 votosTotais++;
+                opcaoInvalida = false;
                 audioConfirmacao();
                 break;
             default:
                 opcaoInvalida = true;
                 break;
         }
-    } while (codigoVoto !== 0);
+    } while (codigoVoto !== senhaMesario);
+
+    dataHoraFim = dataHoraAtual();
 
     if (votosCandidato1 > votosCandidato2 && votosCandidato1 > votosCandidato3) {
         nomeGanhador = nomeCandidato1;
@@ -165,70 +193,54 @@ function urnaEletronica() {
     } else if (votosCandidato3 > votosCandidato1 && votosCandidato3 > votosCandidato2) {
         nomeGanhador = nomeCandidato3;
         votosTotaisGanhador = votosCandidato3 + votosBranco;
+    } else {
+        situacaoEmpate = true;
     }
-
-    console.clear();
-
-    console.log("** Resultado da apuração desta urna\n\n");
 
     if (votosTotais !== 0) {
         percentualGanhador = (votosTotaisGanhador / votosTotais) * 100.0;
 
-        console.log("Votos totais: ", votosTotais, "\n");
+        window.alert(
+            "** Boletim de urna\n\n" +
+            "Votos totais: " + votosTotais + "\n" +
 
-        console.log("Votos no candidato ",
-            nomeCandidato1,
-            ": ",
-            votosCandidato1,
-            " (",
-            (votosCandidato1 / votosTotais * 100.0).toFixed(2),
-            "%)\n"
-        );
-        console.log(
-            "Votos no candidato ",
-            nomeCandidato2,
-            ": ",
-            votosCandidato2,
-            " (",
-            (votosCandidato2 / votosTotais * 100.0).toFixed(2),
-            "%)\n"
-        );
-        console.log(
-            "Votos no candidato ",
-            nomeCandidato3,
-            ": ",
-            votosCandidato3,
-            " (",
-            (votosCandidato3 / votosTotais * 100.0).toFixed(2),
-            "%)\n"
-        );
-        console.log(
-            "Votos em branco: ",
-            votosBranco,
-            " (",
-            (votosBranco / votosTotais * 100.0).toFixed(2),
-            "%)\n"
-        );
-        console.log(
-            "Votos nulos: ",
-            votosNulo,
-            " (",
-            (votosNulo / votosTotais * 100.0).toFixed(2),
-            "%)\n\n"
-        );
+            "Votos no candidato " + nomeCandidato1 + ": " + votosCandidato1 +
+            " (" + (votosCandidato1 / votosTotais * 100.0).toFixed(2) + "%)\n" +
 
-        console.log("** Ganhador nesta urna\n\n");
-        console.log(
-            nomeGanhador,
-            " com ",
-            votosTotaisGanhador,
-            " votos (",
-            percentualGanhador.toFixed(2),
-            "%) somados os votos em branco\n"
+            "Votos no candidato " + nomeCandidato2 + ": " + votosCandidato2 +
+            " (" + (votosCandidato2 / votosTotais * 100.0).toFixed(2) + "%)\n" +
+
+            "Votos no candidato " + nomeCandidato3 + ": " + votosCandidato3 +
+            " (" + (votosCandidato3 / votosTotais * 100.0).toFixed(2) + "%)\n" +
+
+            "Votos em branco: " + votosBranco + " (" +
+            (votosBranco / votosTotais * 100.0).toFixed(2) + "%)\n" +
+
+            "Votos nulos: " + votosNulo + " (" +
+            (votosNulo / votosTotais * 100.0).toFixed(2) + "%)"
         );
 
     } else {
-        console.log("** Nenhum voto registrado\n");
+        window.alert("** Boletim de urna\n\n** Nenhum voto registrado");
+    }
+
+    if (!situacaoEmpate) {
+        window.alert(
+            "** Boletim de urna\n\n" +
+            "** Ganhador nesta urna: \n\n" +
+            nomeGanhador.toUpperCase() + ", com " + votosTotaisGanhador + " votos (" +
+            percentualGanhador.toFixed(2) + "%) somados os votos em branco.\n\n" +
+            "Início da votação: " + dataHoraInicio + "\n" +
+            "Final da votação: " + dataHoraFim
+        );
+
+    } else if (votosTotais !== 0) {
+        window.alert(
+            "** Boletim de urna\n\n" +
+            "** Não foi possível determinar um ganhador nesta\nurna (houve empate entre os candidatos mais votados).\n\n" +
+            "Início da votação: " + dataHoraInicio + "\n" +
+            "Final da votação: " + dataHoraFim
+        );
     }
 
 }
@@ -242,24 +254,12 @@ function audioConfirmacao() {
     }, 500);
 }
 
-// if (codigoVoto !== null) {
-//     codigoVoto = parseInt(codigoVoto);
-// } else {
-//     break;
-// }
-
-/* OS BOTÕES VÃO NO INDEX.HTML
-<button type="button" onclick="urnaEletronica()">Começar</button>
-<button type="button" onclick="audioConfirmacao()">Testar audio</button> */
-
-function escreveNoConsole() {
-    console.log("Mensagem no console");
+function usuarioCancelou(leituraPrompt) {
+    return leituraPrompt === null;
 }
 
-function escreveNoAlert() {
-    window.alert("Mensagem no Alert\nOutra mensagem\n\nMais uma mensagem");
-}
-
-function escreveNoDocumento() {
-    document.write("Mensagem no documento");
+function dataHoraAtual() {
+    const dataAtual = new Date().toLocaleDateString();
+    const horaAtual = new Date().toLocaleTimeString();
+    return dataAtual + " " + horaAtual;
 }
