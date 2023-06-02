@@ -50,10 +50,10 @@ function urnaEletronica() {
         votosTotaisGanhador = 0,
         percentualGanhador = 0.0;
 
-    const
-        nomeCandidato1 = prompt("Digite o nome do 1º candidato(a):"),
-        nomeCandidato2 = prompt("Digite o nome do 2º candidato(a):"),
-        nomeCandidato3 = prompt("Digite o nome do 3º candidato(a):"),
+    let
+        nomeCandidato1,
+        nomeCandidato2,
+        nomeCandidato3,
 
         senhaMesario = 789456;
 
@@ -61,8 +61,43 @@ function urnaEletronica() {
         nomeGanhador = "";
 
     let
-        opcaoInvalida = false;
+        opcaoInvalida = false,
+        iniciaVotacao = false;
+    
+    do {
+        console.clear();
 
+        if (opcaoInvalida) {
+            console.log("Opção inválida!");
+        }
+
+        console.log("** Configuração da urna");
+
+        nomeCandidato1 = prompt("Digite o nome do(a) 1º candidato(a):");
+        nomeCandidato2 = prompt("Digite o nome do(a) 2º candidato(a):");
+        nomeCandidato3 = prompt("Digite o nome do(a) 3º candidato(a):");
+
+        console.clear();
+
+        console.log("** Candidatos configurados:\n");
+        console.log("| 1 | ", nomeCandidato1);
+        console.log("| 2 | ", nomeCandidato2);
+        console.log("| 3 | ", nomeCandidato3);
+        
+        console.log("** Liberação da urna:\n");
+        console.log("| L | Liberar urna para votação");
+        console.log("| C | Configurar urna novamente");
+
+        opcaoInicio = prompt("Opção de liberação da urna:");
+
+        if (opcaoInicio == "L" || opcaoInicio == "l") {
+            iniciaVotacao = true;
+        } else if (opcaoInicio != "C" && opcaoInicio != "c") {
+            opcaoInvalida = true;
+        }
+
+    } while (!iniciaVotacao);
+    
     do {
         console.clear();
 
@@ -93,27 +128,27 @@ function urnaEletronica() {
             case 1:
                 votosCandidato1++;
                 votosTotais++;
-                audioConfirma();
+                audioConfirmacao();
                 break;
             case 2:
                 votosCandidato2++;
                 votosTotais++;
-                audioConfirma();
+                audioConfirmacao();
                 break;
             case 3:
                 votosCandidato3++;
                 votosTotais++;
-                audioConfirma();
+                audioConfirmacao();
                 break;
             case 5:
                 votosBranco++;
                 votosTotais++;
-                audioConfirma();
+                audioConfirmacao();
                 break;
             case 8:
                 votosNulo++;
                 votosTotais++;
-                audioConfirma();
+                audioConfirmacao();
                 break;
             default:
                 opcaoInvalida = true;
@@ -195,9 +230,36 @@ function urnaEletronica() {
     } else {
         console.log("** Nenhum voto registrado\n");
     }
+
 }
 
-function audioConfirma() {
-    let audio = new Audio("confirmacao.mp3");
+function audioConfirmacao() {
+    const audio = new Audio("./assets/audio/confirmacao.mp3");
     audio.play();
+
+    setTimeout(() => {
+        audio.pause();
+    }, 500);
+}
+
+// if (codigoVoto !== null) {
+//     codigoVoto = parseInt(codigoVoto);
+// } else {
+//     break;
+// }
+
+/* OS BOTÕES VÃO NO INDEX.HTML
+<button type="button" onclick="urnaEletronica()">Começar</button>
+<button type="button" onclick="audioConfirmacao()">Testar audio</button> */
+
+function escreveNoConsole() {
+    console.log("Mensagem no console");
+}
+
+function escreveNoAlert() {
+    window.alert("Mensagem no Alert\nOutra mensagem\n\nMais uma mensagem");
+}
+
+function escreveNoDocumento() {
+    document.write("Mensagem no documento");
 }
