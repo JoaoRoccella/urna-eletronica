@@ -39,6 +39,7 @@
 
 function urnaEletronica() {
 
+    // declaração de variáveis
     let
         codigoVoto,
         votosTotais = 0,
@@ -64,6 +65,7 @@ function urnaEletronica() {
         dataHoraInicio,
         dataHoraFim;
 
+    // loop de configuração da urna
     do {
 
         if (opcaoInvalida) {
@@ -111,8 +113,10 @@ function urnaEletronica() {
 
     } while (!iniciaVotacao);
 
+    // armazena a data e hora de início da votação
     dataHoraInicio = dataHoraAtual();
 
+    // loop de votação
     do {
 
         if (opcaoInvalida) {
@@ -136,6 +140,7 @@ function urnaEletronica() {
             break;
         }
 
+        // contabiliza o voto de acordo com o código votado
         switch (codigoVoto) {
             case senhaMesario:
 
