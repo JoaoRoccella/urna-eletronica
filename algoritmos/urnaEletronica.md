@@ -39,13 +39,11 @@
 
 7. apresente a quantidade e percentual de votos válidos do candidato 3
 
-8. apresente a quantidade e percentual de votos válidos do candidato 4
+8. apresente a quantidade e percentual de votos brancos
 
-9. apresente a quantidade e percentual de votos brancos
+9. apresente a quantidade e percentual de votos nulos
 
-10. apresente a quantidade e percentual de votos nulos
-
-11. Determine o candidato ganhador:
+10. Determine o candidato ganhador:
 
     11.1 Se o candidato 1 teve mais votos que o candidato 2 e 3, então o candidato 1 é o ganhador
 
