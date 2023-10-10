@@ -45,22 +45,22 @@
 
 10. Determine o candidato ganhador:
 
-    11.1 Se o candidato 1 teve mais votos que o candidato 2 e 3, então o candidato 1 é o ganhador
+    10.1 Se o candidato 1 teve mais votos que o candidato 2 e 3, então o candidato 1 é o ganhador
 
-    11.2 se o canddiato 2 teve mais votos que o candidato 1 e 3, então o candidato 2 é o ganhador
+    10.2 se o canddiato 2 teve mais votos que o candidato 1 e 3, então o candidato 2 é o ganhador
 
-    11.3 se o candidato 3 teve mais votos que o candidato 1 e 2, então o candidato 3 é o ganhador
+    10.3 se o candidato 3 teve mais votos que o candidato 1 e 2, então o candidato 3 é o ganhador
 
-    11.4 caso contrário, houve empate, portanto não há um ganhador
+    10.4 caso contrário, houve empate, portanto não há um ganhador
 
-12. Apresente a situação final:
+11. Apresente a situação final:
 
-    12.1 se houver ganhador, então apresente:
+    11.1 se houver ganhador, então apresente:
     
-        12.1.1 o candidato ganhador
-        12.1.2 o total de votos
-        12.1.3 o percentual de votos, incluídos os votos em branco
+        11.1.1 o candidato ganhador
+        11.1.2 o total de votos
+        11.1.3 o percentual de votos, incluídos os votos em branco
 
-    12.2 caso contrário, informe que a situação é de empate
+    11.2 caso contrário, informe que a situação é de empate
 
-13. termine o programa
+12. termine o programa
