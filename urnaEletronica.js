@@ -1,108 +1,102 @@
 function urnaEletronica() {
 
-    let
-        opcao,
-        nomeGanhador,
-        totalVotosGanhador,
-        empate = false,
-        contadorTotalDeVotos = 0,
-        contadorVotosCandidato1 = 0,
-        contadorVotosCandidato2 = 0,
-        contadorVotosCandidato3 = 0,
-        contadorVotosBrancos = 0,
-        contadorVotosNulos = 0;
+    // declaração de variáveis
+    let votosCandidato1 = 0;
+    let votosCandidato2 = 0;
+    let votosCandidato3 = 0;
+    let votosBrancos = 0;
+    let votosNulos = 0;
+    let totalVotos = 0;
+    let voto;
+    let nomeGanhador;
+    let votosGanhador;
+    let ganhador = true;
+    let nomeCandidato1;
+    let nomeCandidato2;
+    let nomeCandidato3;
+    
+    console.log('Início do programa');
 
-    console.log('Iniciando o programa');
+    console.clear();
+    console.log('** CONFIGURAÇÃO DA URNA **');
 
-    const
-        nomeCandidato1 = prompt('Digite o nome do candidato 1:'),
-        nomeCandidato2 = prompt('Digite o nome do candidato 2:'),
-        nomeCandidato3 = prompt('Digite o nome do candidato 3:');
-
+    nomeCandidato1 = prompt('Digite o nome do candidato 1:');
+    nomeCandidato2 = prompt('Digite o nome do candidato 2:');
+    nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+    
     do {
 
-        opcao = parseInt(prompt(
-            ' | 1 | ' + nomeCandidato1 + ' \n' +
-            ' | 2 | ' + nomeCandidato2 + ' \n' +
-            ' | 3 | ' + nomeCandidato3 + ' \n' +
-            ' | 5 | Voto em branco \n' +
-            ' | 8 | Voto nulo \n' +
-            ' | 0 | Encerrar a votação \n\n' +
-            ' Digite sua opção:'
-        ));
+        console.clear();
+        console.log('Opções de voto:');
+        console.log('(1) Candidato 1: ' + nomeCandidato1);
+        console.log('(2) Candidato 2: ' + nomeCandidato2);
+        console.log('(3) Candidato 3: ' + nomeCandidato3);
+        console.log('(5) Voto em branco');
+        console.log('(8) Voto nulo');
+        console.log('(0) Encerrar a votação');
 
-        contadorTotalDeVotos++;
+        voto = parseInt(prompt('Digite sua opção de voto:'));
 
-        switch (opcao) {
-            case 1:
-                console.log('Voto computado para', nomeCandidato1);
-                contadorVotosCandidato1++;
-                break;
-            case 2:
-                console.log('Voto computado para', nomeCandidato2);
-                contadorVotosCandidato2++;
-                break;
-            case 3:
-                console.log('Voto computado para', nomeCandidato3);
-                contadorVotosCandidato3++;
-                break;
-            case 5:
-                console.log('Voto em branco computado');
-                contadorVotosBrancos++;
-                break;
-            case 8:
-                console.log('Voto nulo computado');
-                contadorVotosNulos++;
-                break;
-            case 0:
-                console.log('0 pressionado, encerrando a votação...');
-                contadorTotalDeVotos--;
-                break;
-            default:
-                return;
+        totalVotos++;
+
+        if (voto === 1) {
+            votosCandidato1++;
+        } else if (voto === 2) {
+            votosCandidato2++;
+        } else if (voto === 3) {
+            votosCandidato3++;
+        } else if (voto === 5) {
+            votosBrancos++;
+        } else if (voto === 8) {
+            votosNulos++;
+        } else if (voto === 0) {
+            totalVotos--;
+        } else {
+            return;
         }
 
-    } while (opcao !== 0);
+    } while (voto !== 0);
 
-    // apresentar estatísticas da votação
-    console.log('**BOLETIM DE URNA**');
-    console.log('Total de votos:', contadorTotalDeVotos);
-    
-    console.log('Total de votos do candidato ' + nomeCandidato1 + ':', contadorVotosCandidato1);
-    console.log('Percentual de votos do candidato ' + nomeCandidato1 + ':', contadorVotosCandidato1 / contadorTotalDeVotos * 100, '%');
-    
-    console.log('Total de votos do candidato '+ nomeCandidato2 + ':', contadorVotosCandidato2);
-    console.log('Percentual de votos do candidato ' + nomeCandidato2 + ':', contadorVotosCandidato2 / contadorTotalDeVotos * 100, '%');
+    // Saída para o usuário: boletim de urna
+    console.clear();
+    console.log('** BOLETIM DE URNA **');
+    console.log('Total de votos: ' + totalVotos);
 
-    console.log('Total de votos do candidato ' + nomeCandidato3 + ':', contadorVotosCandidato3);
-    console.log('Percentual de votos do candidato' + nomeCandidato3 + ':', contadorVotosCandidato3 / contadorTotalDeVotos * 100, '%');
-    
-    console.log('Total de votos em branco:', contadorVotosBrancos);
-    console.log('Percentual de votos em branco:', contadorVotosBrancos / contadorTotalDeVotos * 100, '%');
-    
-    console.log('Total de votos nulos:', contadorVotosNulos);
-    console.log('Percentual de votos nulos:', contadorVotosNulos / contadorTotalDeVotos * 100, '%');
-    
-    // determinar o candidato ganhador
-    if (contadorVotosCandidato1 > contadorVotosCandidato2 && contadorVotosCandidato1 > contadorVotosCandidato3) {
-        nomeGanhador = nomeCandidato1;
-        totalVotosGanhador = contadorVotosCandidato1 + contadorVotosBrancos;
-    } else if (contadorVotosCandidato2 > contadorVotosCandidato1 && contadorVotosCandidato2 > contadorVotosCandidato3) {
-        nomeGanhador = nomeCandidato2;
-        totalVotosGanhador = contadorVotosCandidato2 + contadorVotosBrancos;
-    } else if (contadorVotosCandidato3 > contadorVotosCandidato1 && contadorVotosCandidato3 > contadorVotosCandidato2) {
-        nomeGanhador = nomeCandidato3;
-        totalVotosGanhador = contadorVotosCandidato3 + contadorVotosBrancos;
+    // se houver votação
+    if (totalVotos > 0) {
+
+        console.log('Total de votos do candidato(a) ' + nomeCandidato1 + ': ' + votosCandidato1 + ' votos (' + (votosCandidato1 / totalVotos * 100) + '%)');
+        console.log('Total de votos do candidato(a) ' + nomeCandidato2 + ': ' + votosCandidato2 + ' votos (' + (votosCandidato2 / totalVotos * 100) + '%)');
+        console.log('Total de votos do candidato(a) ' + nomeCandidato3 + ': ' + votosCandidato3 + ' votos (' + (votosCandidato3 / totalVotos * 100) + '%)');
+        console.log('Total de votos brancos: ' + votosBrancos + ' votos (' + (votosBrancos / totalVotos * 100) + '%)');
+        console.log('Total de votos nulos: ' + votosNulos + ' votos (' + (votosNulos / totalVotos * 100) + '%)');
+
+        // determinação do ganhador
+        if (votosCandidato1 > votosCandidato2 && votosCandidato1 > votosCandidato3) {
+            nomeGanhador = nomeCandidato1;
+            votosGanhador = votosCandidato1 + votosBrancos;
+        } else if (votosCandidato2 > votosCandidato1 && votosCandidato2 > votosCandidato3) {
+            nomeGanhador = nomeCandidato2;
+            votosGanhador = votosCandidato2 + votosBrancos;
+        } else if (votosCandidato3 > votosCandidato1 && votosCandidato3 > votosCandidato2) {
+            nomeGanhador = nomeCandidato3;
+            votosGanhador = votosCandidato3 + votosBrancos;
+        } else {
+            ganhador = false;
+        }
+
+        // exibição do ganhador
+        console.log('-------');
+        if (ganhador) {
+            console.log('O ganhador desta urna foi ' + nomeGanhador + ' com ' + votosGanhador + ' votos (' + (votosGanhador / totalVotos * 100) + '%)');
+        } else {
+            console.log('Não houve ganhador nesta urna (empate entre 2 ou mais candidatos');
+        }
+        
     } else {
-        empate = true;
+        console.log('Não houve votação  nesta urna');
     }
 
-    if (!empate) {
-        console.log('Ganhador nesta urna: ' + nomeGanhador);
-        console.log('Total de votos do ganhador:', totalVotosGanhador + contadorVotosBrancos);
-        console.log('Percentual de votos do ganhador:', (totalVotosGanhador + contadorVotosBrancos) / contadorTotalDeVotos * 100 + '%');
-    } else {
-        console.log('Não houve ganhador nesta urna');
-    }
+    console.log('Fim do programa');
 
 }
