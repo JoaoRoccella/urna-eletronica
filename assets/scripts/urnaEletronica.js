@@ -63,6 +63,8 @@ function urnaEletronica() {
 
         dataHoraInicio,
         dataHoraFim;
+        
+    
 
     do {
 
@@ -150,36 +152,38 @@ function urnaEletronica() {
                 votosCandidato1++;
                 votosTotais++;
                 opcaoInvalida = false;
-                audioConfirmacao();
+                
                 break;
             case 2:
                 votosCandidato2++;
                 votosTotais++;
                 opcaoInvalida = false;
-                audioConfirmacao();
+                
                 break;
             case 3:
                 votosCandidato3++;
                 votosTotais++;
                 opcaoInvalida = false;
-                audioConfirmacao();
+                
                 break;
             case 5:
                 votosBranco++;
                 votosTotais++;
                 opcaoInvalida = false;
-                audioConfirmacao();
+                
                 break;
             case 8:
                 votosNulo++;
                 votosTotais++;
                 opcaoInvalida = false;
-                audioConfirmacao();
+                
                 break;
             default:
                 opcaoInvalida = true;
                 break;
         }
+        
+        audioConfirmacao();
     } while (codigoVoto !== senhaMesario);
 
     dataHoraFim = dataHoraAtual();
@@ -246,12 +250,14 @@ function urnaEletronica() {
 }
 
 function audioConfirmacao() {
-    const audio = new Audio("./assets/audio/confirmacao.mp3");
-    audio.play();
+    const audio = document.getElementById("somConfirmacao");
+    audio.currentTime = 0; // Define o tempo de reprodução para o início
 
-    setTimeout(() => {
-        audio.pause();
-    }, 500);
+    if (audio.paused) {
+        audio.play();
+    } else {
+        audio.currentTime = 0;
+    }
 }
 
 function usuarioCancelou(leituraPrompt) {
