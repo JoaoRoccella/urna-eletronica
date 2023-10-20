@@ -12,37 +12,55 @@ function urnaEletronica() {
     let nomeGanhador;
     let votosGanhador;
     let ganhador = true;
-    
+
     let nomeCandidato1;
     let nomeCandidato2;
     let nomeCandidato3;
+    let opcaoNome;
+    let primeiraConfiguracao = true;
 
     let encerrarVotacao;
     let senhaMesario;
-    
+
     console.log('Início do programa');
 
     console.clear();
     console.log('** CONFIGURAÇÃO DA URNA **');
 
     senhaMesario = parseInt(prompt('Defina sua senha de mesário:'));
-    
+
     do {
-        if (primeira) {
+        if (primeiraConfiguracao) {
             nomeCandidato1 = prompt('Digite o nome do candidato 1:');
             nomeCandidato2 = prompt('Digite o nome do candidato 2:');
             nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+            primeiraConfiguracao = false;
         } else {
-            opcaoNome = prompt
+            opcaoNome = parseInt(prompt(
+                'Qual nome deseja alterar?\n\n' +
+                '[1] ' + nomeCandidato1 + '\n' +
+                '[2] ' + nomeCandidato2 + '\n' +
+                '[3] ' + nomeCandidato3 + '\n' 
+            ));
+
+            if (opcaoNome === 1)
+                nomeCandidato1 = prompt('Digite o nome do candidato 1:');
+            else if (opcaoNome === 2)
+                nomeCandidato2 = prompt('Digite o nome do candidato 2:');
+            else if (opcaoNome === 3)
+                nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+            else
+                console.log('Opção inválida!');
         }
 
+        console.clear();
         console.log('** NOMES DOS CANDIDATOS **');
         console.log('Candidato 1: ' + nomeCandidato1);
         console.log('Candidato 2: ' + nomeCandidato2);
         console.log('Candidato 3: ' + nomeCandidato3);
 
     } while (!confirm('Verifique se os nomes dos candidatos estão corretos.\nClique OK para continuar ou CANCELAR para voltar e digitar novamente.'));
-    
+
     do {
 
         console.clear();
@@ -67,18 +85,18 @@ function urnaEletronica() {
         } else if (voto === 0) {
             return;
         } else if (voto === senhaMesario) {
-            
+
             // segundo passo de confirmação para encerrar
             encerrarVotacao = prompt('Deseja REALMENTE encerrar a votação? Digite [S] para Sim ou [N] para Não').toUpperCase();
-            
+
             if (encerrarVotacao !== 'S' && encerrarVotacao !== 'N') {
                 alert('Opcão inválida');
             }
 
             totalVotos--;
-            
+
         } else {
-            
+
             if (confirm('ATENÇÃO: o seu voto será ANULADO. Deseja prosseguir?')) {
                 votosNulos++;
             } else {
@@ -123,7 +141,7 @@ function urnaEletronica() {
         } else {
             console.log('Não houve ganhador nesta urna (empate entre 2 ou mais candidatos');
         }
-        
+
     } else {
         console.log('Não houve votação  nesta urna');
     }
