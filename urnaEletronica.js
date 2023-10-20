@@ -8,12 +8,15 @@ function urnaEletronica() {
     let votosNulos = 0;
     let totalVotos = 0;
     let voto;
+
     let nomeGanhador;
     let votosGanhador;
     let ganhador = true;
+    
     let nomeCandidato1;
     let nomeCandidato2;
     let nomeCandidato3;
+
     let encerrarVotacao;
     let senhaMesario;
     
@@ -22,19 +25,23 @@ function urnaEletronica() {
     console.clear();
     console.log('** CONFIGURAÇÃO DA URNA **');
 
-    senhaMesario = parseInt(prompt('Digite sua senha de mésário:'));
+    senhaMesario = parseInt(prompt('Defina sua senha de mesário:'));
     
     do {
-        nomeCandidato1 = prompt('Digite o nome do candidato 1:');
-        nomeCandidato2 = prompt('Digite o nome do candidato 2:');
-        nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+        if (primeira) {
+            nomeCandidato1 = prompt('Digite o nome do candidato 1:');
+            nomeCandidato2 = prompt('Digite o nome do candidato 2:');
+            nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+        } else {
+            opcaoNome = prompt
+        }
 
         console.log('** NOMES DOS CANDIDATOS **');
         console.log('Candidato 1: ' + nomeCandidato1);
         console.log('Candidato 2: ' + nomeCandidato2);
         console.log('Candidato 3: ' + nomeCandidato3);
 
-    } while (!confirm('Se os nomes dos candidatos estão corretos, clique OK para continuar ou CANCELAR para voltar e digitar novamente'));
+    } while (!confirm('Verifique se os nomes dos candidatos estão corretos.\nClique OK para continuar ou CANCELAR para voltar e digitar novamente.'));
     
     do {
 
