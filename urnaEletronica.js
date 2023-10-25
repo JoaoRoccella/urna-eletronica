@@ -38,22 +38,27 @@ function urnaEletronica() {
             case 1:
                 console.log('Voto computado para', nomeCandidato1);
                 contadorVotosCandidato1++;
+                tocaAudioConfirmacao();
                 break;
             case 2:
                 console.log('Voto computado para', nomeCandidato2);
                 contadorVotosCandidato2++;
+                tocaAudioConfirmacao();
                 break;
             case 3:
                 console.log('Voto computado para', nomeCandidato3);
                 contadorVotosCandidato3++;
+                tocaAudioConfirmacao();
                 break;
             case 5:
                 console.log('Voto em branco computado');
                 contadorVotosBrancos++;
+                tocaAudioConfirmacao();
                 break;
             case 8:
                 console.log('Voto nulo computado');
                 contadorVotosNulos++;
+                tocaAudioConfirmacao();
                 break;
             case 456789:
                 if (confirm('Deseja realmente encerrar a votação?')) {
@@ -119,9 +124,16 @@ function urnaEletronica() {
 
 }
 
+function tocaAudioConfirmacao() {
+    const audio = document.querySelector('#audioConfirmacao');
+
+    audio.play();
+    
+}
+
 function verificaIntegridadeUrna() {
 
-    // Gerar o hash em: https://www.convertstring.com/pt_PT/Hash/SHA256
+    // Gerar o hash em: https://emn178.github.io/online-tools/sha256.html
 
     fetch('urnaEletronica.js')
         .then(conteudo => conteudo.text())

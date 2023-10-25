@@ -8,7 +8,56 @@
     <title>Urna Eletrônica</title>
 </head>
 <body>
+    <audio src="./confirmacao.mp3" type="audio/mp3" id="audioConfirmacao" preload="auto"></audio>
     <button type="button" onclick="urnaEletronica()">Iniciar</button>
+
+
+    <section id="urnaEletronica">
+
+        <div id="tela"></div>
+        <div id="teclado">
+            <div class="linha">
+                <button type="button">1</button>
+                <button type="button">2</button>
+                <button type="button">3</button>
+            </div>
+            <div class="linha">
+                <button type="button">4</button>
+                <button type="button">5</button>
+                <button type="button">6</button>
+            </div>
+            <div class="linha">
+                <button type="button">7</button>
+                <button type="button">8</button>
+                <button type="button">9</button>
+            </div>
+            <div class="linha">
+                <button type="button">0</button>
+            </div>
+            <div class="linha">
+                <button type="button">Branco</button>
+                <button type="button">Corrige</button>
+                <button type="button">Confirma</button>
+            </div>
+        </div>
+
+    </section>
+
+    <section id="mesario">
+        
+        <div class="controle-form">
+            <label for="eleitor">Eleitor</label>
+            <input type="text" id="eleitor">
+        </div>
+
+        <div class="controle-form">
+
+            <button type="button">Liberar Urna</button>
+
+        </div>
+    </section>
+    <button type="button" onclick="startLoop()">Start Loop</button>
     <script src="./urnaEletronica.js"></script>
+    <script src="./breakLoop.js"></script>
 </body>
 </html>
