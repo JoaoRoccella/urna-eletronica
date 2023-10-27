@@ -1,3 +1,7 @@
+function dataAtual() {
+    return "alguma coisa";
+}
+
 function urnaEletronica() {
 
     // declaração de variáveis
@@ -8,27 +12,51 @@ function urnaEletronica() {
     let votosNulos = 0;
     let totalVotos = 0;
     let voto;
+
     let nomeGanhador;
     let votosGanhador;
     let ganhador = true;
+
     let nomeCandidato1;
     let nomeCandidato2;
     let nomeCandidato3;
+
     let encerrarVotacao;
     let senhaMesario;
+    let primeiraConfiguracao = true;
     
     console.log('Início do programa');
-
+    
     console.clear();
     console.log('** CONFIGURAÇÃO DA URNA **');
-
+    
     senhaMesario = parseInt(prompt('Digite sua senha de mésário:'));
     
     do {
-        nomeCandidato1 = prompt('Digite o nome do candidato 1:');
-        nomeCandidato2 = prompt('Digite o nome do candidato 2:');
-        nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+        if (primeiraConfiguracao) {
+            nomeCandidato1 = prompt('Digite o nome do candidato 1:');
+            nomeCandidato2 = prompt('Digite o nome do candidato 2:');
+            nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+            primeiraConfiguracao = false;
+        } else {
+            opcaoNome = parseInt(prompt(
+                'Qual nome deseja alterar?\n\n' +
+                '[1] ' + nomeCandidato1 + '\n' +
+                '[2] ' + nomeCandidato2 + '\n' +
+                '[3] ' + nomeCandidato3 + '\n' 
+            ));
 
+            if (opcaoNome === 1)
+                nomeCandidato1 = prompt('Digite o nome do candidato 1:');
+            else if (opcaoNome === 2)
+                nomeCandidato2 = prompt('Digite o nome do candidato 2:');
+            else if (opcaoNome === 3)
+                nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+            else
+                alert('Opção inválida!');
+        }
+
+        console.clear();
         console.log('** NOMES DOS CANDIDATOS **');
         console.log('Candidato 1: ' + nomeCandidato1);
         console.log('Candidato 2: ' + nomeCandidato2);
