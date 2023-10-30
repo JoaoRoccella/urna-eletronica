@@ -4,6 +4,29 @@ function dataHoraAtual() {
     return `${dataHora.getDate()}/${dataHora.getMonth() + 1}/${dataHora.getFullYear()} ${dataHora.getHours()}:${dataHora.getMinutes()}:${dataHora.getSeconds()} ${dataHora.getMilliseconds()}ms`;
 }
 
+function verificarIntegridadeUrna() {
+
+    // Biblioteca CryptoJS: https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js
+
+    fetch('./urnaEletronica.js')
+        .then(conteudo => conteudo.text())
+        .then(conteudo => CryptoJS.SHA256(conteudo).toString())
+        .then(hashUrnaAtual => {
+            fetch('./hashVerificado')
+                .then(conteudo => conteudo.text())
+                .then(hashVerificado => {
+                    if (hashUrnaAtual === hashVerificado) {
+                        console.log('Hash verificado, urna íntegra.')
+                    } else {
+                        console.log('HASHES DIFERENTES, URNA ADULTERADA!');
+                        console.log(`Hash esperado: ${hashVerificado}`);
+                        console.log(`Hash da urna: ${hashUrnaAtual}`);
+                    }
+                })
+        }); 
+
+}
+
 function urnaEletronica() {
 
     // declaração de variáveis
@@ -164,6 +187,8 @@ function urnaEletronica() {
 
     console.log(`Data e hora do início da votação: ${dataHoraInicial}`);
     console.log(`Data e hora do fim da votação: ${dataHoraFinal}`);
+
+    verificarIntegridadeUrna();
 
     console.log(`Fim do programa`);
 
