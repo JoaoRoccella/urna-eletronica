@@ -1,5 +1,7 @@
-function dataAtual() {
-    return "alguma coisa";
+function dataHoraAtual() {
+    const dataHora = new Date();
+
+    return `${dataHora.getDate()}/${dataHora.getMonth() + 1}/${dataHora.getFullYear()} ${dataHora.getHours()}:${dataHora.getMinutes()}:${dataHora.getSeconds()} ${dataHora.getMilliseconds()}ms`;
 }
 
 function urnaEletronica() {
@@ -24,13 +26,16 @@ function urnaEletronica() {
     let encerrarVotacao;
     let senhaMesario;
     let primeiraConfiguracao = true;
+    let dataHoraInicial;
+    let dataHoraFinal;
     
     console.log(`Início do programa`);
+    dataHoraInicial = dataHoraAtual();
     
     console.clear();
     console.log(`** CONFIGURAÇÃO DA URNA **`);
     
-    senhaMesario = parseInt(prompt(`Digite sua senha de mésário:`));
+    senhaMesario = parseInt(prompt(`Digite sua senha de mesário:`));
     
     do {
         if (primeiraConfiguracao) {
@@ -109,6 +114,9 @@ function urnaEletronica() {
         }
 
     } while (encerrarVotacao !== 'S');
+    // fim do laço de votação
+
+    dataHoraFinal = dataHoraAtual();
 
     // Saída para o usuário: boletim de urna
     console.clear();
@@ -153,6 +161,9 @@ function urnaEletronica() {
     } else {
         console.log(`Não houve votação  nesta urna`);
     }
+
+    console.log(`Data e hora do início da votação: ${dataHoraInicial}`);
+    console.log(`Data e hora do fim da votação: ${dataHoraFinal}`);
 
     console.log(`Fim do programa`);
 
