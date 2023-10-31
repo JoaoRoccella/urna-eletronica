@@ -30,14 +30,6 @@ function verificarIntegridadeUrna() {
 function urnaEletronica() {
 
     // declaração de variáveis
-    let votosBrancos = 0;
-    let votosNulos = 0;
-    let totalVotos = 0;
-    let voto;
-    let votoValido;
-
-    let ganhador = true;
-
     let candidatos = [
         [71, 'Lúcia', 0],
         [72, 'Edmundo', 0],
@@ -45,7 +37,13 @@ function urnaEletronica() {
         [74, 'Susana', 0],
         [75, 'Eustáquio', 0]
     ];
-
+    let votosBrancos = 0;
+    let votosNulos = 0;
+    let totalVotos = 0;
+    
+    let voto;
+    let votoValido;
+    let ganhador = true;
     let encerrarVotacao;
     let senhaMesario;
     let dataHoraInicial;
