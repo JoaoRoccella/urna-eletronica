@@ -1,4 +1,19 @@
-function urnaEletronica() {
+async function audioConfirmacao() {
+        const audio = new Audio('./confirmacao.mp3');
+        await audio.play();
+}
+
+// Declarando uma função que retorna explicitamente uma Promise
+
+// function audioConfirmacao() {
+//     return new Promise((resolve) => {
+//         const audio = new Audio('./confirmacao.mp3');
+//         audio.onended = resolve;
+//         audio.play();
+//     });
+// }
+
+async function urnaEletronica() {
 
     // declaração de variáveis
     let votosCandidato1 = 0;
@@ -76,12 +91,16 @@ function urnaEletronica() {
 
         if (voto === 1) {
             votosCandidato1++;
+            await audioConfirmacao();
         } else if (voto === 2) {
             votosCandidato2++;
+            await audioConfirmacao();
         } else if (voto === 3) {
             votosCandidato3++;
+            await audioConfirmacao();
         } else if (voto === 5) {
             votosBrancos++;
+            await audioConfirmacao();
         } else if (voto === 0) {
             return;
         } else if (voto === senhaMesario) {
@@ -99,6 +118,7 @@ function urnaEletronica() {
 
             if (confirm('ATENÇÃO: o seu voto será ANULADO. Deseja prosseguir?')) {
                 votosNulos++;
+                await audioConfirmacao();
             } else {
                 totalVotos--;
             }
