@@ -39,99 +39,84 @@ function dataHoraAtual() {
 
 function urnaEletronica() {
 
-    // declaração de variáveis
-    let voto;
-    let votosCandidato1 = 0;
-    let votosCandidato2 = 0;
-    let votosCandidato3 = 0;
+    let candidatos = [
+        [11, 'Gandalf The Grey', 0],
+        [12, 'Frodo Baggins', 0],
+        [13, 'Samwise Gamgee', 0],
+        [14, 'Pippin Took', 0],
+        [15, 'Merry Brandybuck', 0]
+    ];
     let votosBrancos = 0;
     let votosNulos = 0;
     let totalVotos = 0;
-
-    let nomeGanhador;
-    let votosGanhador;
+    
+    let voto;
+    let votoValido = false;
+    
     let ganhador = true;
-
-    let nomeCandidato1;
-    let nomeCandidato2;
-    let nomeCandidato3;
-
-    let encerrarVotacao = '';
+    let encerrarVotacao;
     let senhaMesario;
-    let primeiraConfiguracao = true;
-    let opcaoNome;
 
-    let dataHoraInicial, dataHoraFinal;
+    let dataHoraInicial
+    let dataHoraFinal;
 
     console.log('Início do programa');
 
     console.log('** CONFIGURAÇÃO DA URNA **');
+    
     senhaMesario = parseInt(prompt('Defina a senha do mesário:'));
 
-    if (primeiraConfiguracao) {
-        nomeCandidato1 = prompt(`Digite o nome do candidato 1:`);
-        nomeCandidato2 = prompt(`Digite o nome do candidato 2:`);
-        nomeCandidato3 = prompt(`Digite o nome do candidato 3:`);
-        primeiraConfiguracao = false;
-    } else {
-        opcaoNome = parseInt(prompt(`
-            Qual nome deseja alterar?\n\n
-            [1] ${nomeCandidato1} \n
-            [2] ${nomeCandidato2} \n
-            [3] ${nomeCandidato3} \n 
-        `));
-
-        if (opcaoNome === 1) {
-            nomeCandidato1 = prompt(`Digite o nome do candidato 1:`);
-        } else if (opcaoNome === 2) {
-            nomeCandidato2 = prompt(`Digite o nome do candidato 2:`);
-        } else if (opcaoNome === 3) {
-            nomeCandidato3 = prompt(`Digite o nome do candidato 3:`);
-        } else {
-            alert(`Opção inválida!`);
-        }
-    }
-
+    console.clear();
+    
     // laço de votação
     dataHoraInicial = dataHoraAtual();
-
+    
     do {
-
-        console.clear();
-        console.log(`[1] Candidato 1: ${nomeCandidato1}`);
-        console.log(`[2] Candidato 2: ${nomeCandidato2}`);
-        console.log(`[3] Candidato 3: ${nomeCandidato3}`);
-        console.log(`[5] Voto em branco`);
-        console.log(`[8] Voto nulo`);
 
         voto = parseInt(prompt('Digite sua opção de voto:'));
 
         totalVotos++;
 
-        if (voto === 1) {
-            votosCandidato1++;
-        } else if (voto === 2) {
-            votosCandidato2++;
-        } else if (voto === 3) {
-            votosCandidato3++;
-        } else if (voto === 5) {
-            votosBrancos++;
-        } else if (voto === 8) {
-            votosNulos++;
-        } else if (voto === senhaMesario) {
+        for (i = 0; i < candidatos.length; i++) {
+            if (voto === candidatos[i][0]) {
+                if (confirm(`
+                Voto selecionado para o candidato ${candidatos[i][1]}. Deseja CONFIRMAR?
+                Pressione [OK] para CONFIRMAR seu voto ou [CANCELAR] para votar novamente.`)) {
+                    console.log(`Votos registrados para o candidato ${candidatos[i][1]} (parcial): ${++candidatos[i][2]}`);
 
-            encerrarVotacao = prompt('Deseja REALMENTE encerrar a votação? Digite [S] para Sim ou [N] para Não').charAt(0).toUpperCase();
-
-            if (encerrarVotacao !== 'S' && encerrarVotacao !== 'N') {
-                alert('Opção inválida!');
+                }
+                votoValido = true;
             }
+        }
+        
+        if (!votoValido) {
 
-            totalVotos--;
-        } else {
-            return; // botão de emergência
+            if (voto === 5) {
+                votosBrancos++;
+            } else if (voto === senhaMesario) {
+    
+                if (encerrarVotacao = confirm(`
+                Deseja REALMENTE encerrar a votação?
+                Pressione [OK] para ENCERRAR a votação e [CANCELAR] para CONTINUAR a votação.`)) {
+                    totalVotos--;
+                }
+    
+            } else if (voto === 0) {
+                return; // botão de emergência
+            } else {
+                if (confirm(`
+                Você votou uma opção inválida (${voto}) e seu voto será ANULADO. 
+                Deseja prosseguir?
+                Pressione [OK] para ANULAR seu voto e [CANCELAR] para CORRIGIR e VOTAR NOVAMENTE.`)) {
+                    votosNulos++;
+                } else {
+                    totalVotos--;
+                    alert('Voto corrigido, você deve VOTAR NOVAMENTE');
+                }
+            }
         }
 
-    } while (encerrarVotacao !== 'S');
+    } while (!encerrarVotacao);
 
     // apresenta os resultados
     console.clear();
