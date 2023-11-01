@@ -1,28 +1,3 @@
-function verificaUrnaAtual() {
-
-    fetch('urnaEletronica.js')
-        .then(response => response.text())
-        .then(response => CryptoJS.SHA256(response).toString())
-        .then(hashUrnaAtual => {
-            
-            fetch('hashValido')
-                .then(response => response.text())
-                .then(hashValido => {
-
-                    if (hashUrnaAtual === hashValido) {
-                        console.log('Urna verificada, código íntegro.')
-                    } else {
-                        console.log('URNA ADULTERADA! HASHES NÃO CONFEREM!')
-                        console.log(`HASH DA URNA: ${hashUrnaAtual}`);
-                        console.log(`HASH ESPERADO: ${hashValido}`);
-                    }
-
-                })
-            
-        });
-
-}
-
 function dataHoraAtual() {
     
     const dataHora = new Date();
@@ -37,7 +12,43 @@ function dataHoraAtual() {
     return `${dia}/${mes}/${ano} ${hora}:${min}:${seg} ${ms}`;
 }
 
-function urnaEletronica() {
+async function verificaUrnaAtual() {
+    
+    let hashUrnaAtual;
+    let hashValido;
+        
+    await fetch('urnaEletronica.js')
+        .then(response => response.text())
+        .then(response => CryptoJS.SHA256(response).toString())
+        .then(response => hashUrnaAtual = response);
+            
+    await fetch('hashValido')
+        .then(response => response.text())
+        .then(response => hashValido = response);
+
+    return {
+        hashUrnaAtual: hashUrnaAtual,
+        hashValido: hashValido,
+        status: hashUrnaAtual === hashValido
+    }
+
+}
+
+async function audioConfirmacao() {
+    const audio = new Audio('./confirmacao.mp3');
+    await audio.play();
+}
+
+// Declarando o retorno explicitamente como um objeto do tipo Promise
+// function audioConfirmacao() {
+//     return new Promise((resolve) => {
+//         const audio = new Audio('./confirmacao.mp3');
+//         audio.onended = resolve;
+//         audio.play();
+//     });
+// }
+
+async function urnaEletronica() {
 
     // declaração de variáveis
     let voto;
@@ -110,14 +121,19 @@ function urnaEletronica() {
 
         if (voto === 1) {
             votosCandidato1++;
+            await audioConfirmacao();
         } else if (voto === 2) {
             votosCandidato2++;
+            await audioConfirmacao();
         } else if (voto === 3) {
             votosCandidato3++;
+            await audioConfirmacao();
         } else if (voto === 5) {
             votosBrancos++;
+            await audioConfirmacao();
         } else if (voto === 8) {
             votosNulos++;
+            await audioConfirmacao();
         } else if (voto === senhaMesario) {
 
             encerrarVotacao = prompt('Deseja REALMENTE encerrar a votação? Digite [S] para Sim ou [N] para Não').charAt(0).toUpperCase();
@@ -176,8 +192,14 @@ function urnaEletronica() {
     console.log(`Data/hora de início da votação: ${dataHoraInicial}`);
     console.log(`Data/hora de encerramento da votação: ${dataHoraFinal}`);
     
-    verificaUrnaAtual();
-
-    console.log('Fim do programa');
-
+    await verificaUrnaAtual().then(verificacao => {
+        if (verificacao.status) {
+            console.log('Hashes verificados, urna íntegra.');
+        } else {
+            console.log('URNA ADULTERADA, DEVE SER DESCARTADA');
+            console.log(`Hash da urna: ${verificacao.hashUrnaAtual}`);
+            console.log(`Hash esperado: ${verificacao.hashValido}`);
+        }
+        console.log('Fim do programa');
+    });
 }
