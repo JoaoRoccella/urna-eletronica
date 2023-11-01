@@ -198,14 +198,14 @@ async function urnaEletronica() {
     console.log(`Data e hora do fim da votação: ${dataHoraFinal}`);
 
     await verificarIntegridadeUrna().then(verificacao => {
-        if (verificacao.status) {
-            console.log('Hashes verificados, urna íntegra.');
-        } else {
-            console.log('URNA ADULTERADA!');
-            console.log(`Hash da urna: ${verificacao.hashUrnaAtual}`);
-            console.log(`Hash esperado: ${verificacao.hashVerificado}`);
-        }
-        console.log('Fim do programa');
-    });
+            if (verificacao.status) {
+                console.log('Hashes verificados, urna íntegra.');
+            } else {
+                console.log('URNA ADULTERADA!');
+                console.log(`Hash da urna: ${verificacao.hashUrnaAtual}`);
+                console.log(`Hash esperado: ${verificacao.hashVerificado}`);
+            }
+            console.log('Fim do programa');
+        });
 
 }
