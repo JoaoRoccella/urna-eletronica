@@ -11,21 +11,25 @@ async function verificarIntegridadeUrna() {
     let hashUrnaAtual;
     let hashVerificado;
 
-    await fetch('urnaEletronica.js')
+    await fetch('./urnaEletronica.js')
         .then(conteudo => conteudo.text())
         .then(conteudo => CryptoJS.SHA256(conteudo).toString())
         .then(conteudo => hashUrnaAtual = conteudo);
-    
-    await fetch('hashVerificado')
+
+    await fetch('./hashVerificado')
         .then(conteudo => conteudo.text())
         .then(conteudo => hashVerificado = conteudo);
-        
+
     return {
         status: hashUrnaAtual === hashVerificado,
         hashUrnaAtual: hashUrnaAtual,
         hashVerificado: hashVerificado
     };
+}
 
+async function audioConfirmacao() {
+    const audio = new Audio('./confirmacao.mp3');
+    await audio.play();
 }
 
 async function urnaEletronica() {
@@ -52,15 +56,15 @@ async function urnaEletronica() {
     let primeiraConfiguracao = true;
     let dataHoraInicial;
     let dataHoraFinal;
-    
+
     console.log(`Início do programa`);
     dataHoraInicial = dataHoraAtual();
-    
+
     console.clear();
     console.log(`** CONFIGURAÇÃO DA URNA **`);
-    
+
     senhaMesario = parseInt(prompt(`Digite sua senha de mesário:`));
-    
+
     do {
         if (primeiraConfiguracao) {
             nomeCandidato1 = prompt(`Digite o nome do candidato 1:`);
@@ -109,27 +113,31 @@ async function urnaEletronica() {
 
         if (voto === 1) {
             votosCandidato1++;
+            await audioConfirmacao();
         } else if (voto === 2) {
             votosCandidato2++;
+            await audioConfirmacao();
         } else if (voto === 3) {
             votosCandidato3++;
+            await audioConfirmacao();
         } else if (voto === 5) {
             votosBrancos++;
+            await audioConfirmacao();
         } else if (voto === 0) {
             return;
         } else if (voto === senhaMesario) {
-            
+
             // segundo passo de confirmação para encerrar
             encerrarVotacao = prompt(`Deseja REALMENTE encerrar a votação? Digite [S] para Sim ou [N] para Não`).toUpperCase();
-            
+
             if (encerrarVotacao !== 'S' && encerrarVotacao !== 'N') {
                 alert(`Opcão inválida`);
             }
 
             totalVotos--;
-            
+
         } else {
-            
+
             if (confirm(`ATENÇÃO: o seu voto será ANULADO. Deseja prosseguir?`)) {
                 votosNulos++;
             } else {
@@ -153,7 +161,7 @@ async function urnaEletronica() {
         console.log(`Total de votos do(a) candidato(a) ${nomeCandidato1}: ${votosCandidato1} votos (${(votosCandidato1 / totalVotos * 100).toFixed(2)}%)`);
 
         console.log(`Total de votos do(a) candidato(a) ${nomeCandidato2}: ${votosCandidato2} votos (${(votosCandidato2 / totalVotos * 100).toFixed(2)}%)`);
-        
+
         console.log(`Total de votos do(a) candidato(a) ${nomeCandidato3}: ${votosCandidato3} votos (${(votosCandidato3 / totalVotos * 100).toFixed(2)}%)`);
 
         console.log(`Total de votos brancos: ${votosBrancos} votos (${(votosBrancos / totalVotos * 100).toFixed(2)}%)`);
@@ -181,7 +189,7 @@ async function urnaEletronica() {
         } else {
             console.log(`Não houve ganhador nesta urna (empate entre 2 ou mais candidatos`);
         }
-        
+
     } else {
         console.log(`Não houve votação  nesta urna`);
     }
@@ -189,7 +197,7 @@ async function urnaEletronica() {
     console.log(`Data e hora do início da votação: ${dataHoraInicial}`);
     console.log(`Data e hora do fim da votação: ${dataHoraFinal}`);
 
-    verificarIntegridadeUrna().then(verificacao => {
+    await verificarIntegridadeUrna().then(verificacao => {
         if (verificacao.status) {
             console.log('Hashes verificados, urna íntegra.');
         } else {
