@@ -1,8 +1,8 @@
 async function minhaFuncao() {
-    let promise = new Promise(cumprida => {
+    const promessa = new Promise(cumprida => {
         setTimeout(() => cumprida('Acabei aqui'), 2000);
     });
-    return promise;
+    return promessa;
 }
 
 async function funcaoPrincipal() {
