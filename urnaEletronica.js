@@ -1,6 +1,10 @@
 function urnaEletronica() {
 
-    let
+    console.log('Iniciando o programa');
+    
+    verificaIntegridadeUrna();
+    
+    let 
         opcao,
         nomeGanhador,
         totalVotosGanhador,
@@ -12,8 +16,6 @@ function urnaEletronica() {
         contadorVotosCandidato3 = 0,
         contadorVotosBrancos = 0,
         contadorVotosNulos = 0;
-
-    console.log('Iniciando o programa');
 
     const
         nomeCandidato1 = prompt('Digite o nome do candidato 1:'),
@@ -144,7 +146,7 @@ function verificaIntegridadeUrna() {
                 .then(conteudo => conteudo.text())
                 .then(conteudo => conteudo.toLowerCase())
                 .then(hashEsperado => {
-                    
+
                     if (hashEsperado === hashCodigoUrna) {
                         console.log('** Hash verificado, urna íntegra **');
                     } else {
