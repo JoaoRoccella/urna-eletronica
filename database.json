@@ -154,27 +154,27 @@
     ],
     "cargos": [
         {
-            "idCargo": 1,
+            "id": 1,
             "nomeCargo": "Presidente",
             "possuiVice": true
         },
         {
-            "idCargo": 2,
+            "id": 2,
             "nomeCargo": "Governador",
             "possuiVice": true
         },
         {
-            "idCargo": 3,
+            "id": 3,
             "nomeCargo": "Senador",
             "possuiVice": true
         },
         {
-            "idCargo": 4,
+            "id": 4,
             "nomeCargo": "Deputado Federal",
             "possuiVice": false
         },
         {
-            "idCargo": 5,
+            "id": 5,
             "nomeCargo": "Deputado Estadual",
             "possuiVice": false
         }

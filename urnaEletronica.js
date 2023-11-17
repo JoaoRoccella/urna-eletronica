@@ -67,15 +67,25 @@ async function votacaoCargos() {
         totalVotos++;
 
         for (j = 0; j < candidatos.length; j++) {
-            if (voto === candidatos[j].id) {
+
+            if (voto === candidatos[j].id && candidatos[j].idCargo === cargos[i].id) {
+
                 if (confirm(`Candidato ${candidatos[j].nome} selecionado. CONFIRMA?`)) {
+
                     await audioConfirmacao();
-                    console.log(`Votos para o candidato ${candidatos[j].nome} (parcial): ${++candidatos[j].totalVotos}`)
+
+                    console.log(`Votos para o candidato ${candidatos[j].nome} (parcial): ${++candidatos[j].totalVotos}`);
+
                 } else {
-                    alert(`Voto para o candidato ${candidatos[j].nome} cancelado, VOTE NOVAMENTE.`)
+
+                    alert(`Voto para o candidato ${candidatos[j].nome} cancelado, VOTE NOVAMENTE.`);
+
                     totalVotos--;
+
                 }
+
                 votoValido = true;
+
                 break;
             }
         }
@@ -92,15 +102,21 @@ async function votacaoCargos() {
                 }
             } else {
 
-                if (confirm(`ATENÇÃO: o seu voto será ANULADO. Deseja prosseguir?`)) {
+                if (confirm(`ATENÇÃO: Código inválido. \nO seu voto será ANULADO. Deseja prosseguir?`)) {
+
                     await audioConfirmacao();
+
                     votosNulos++;
+
                 } else {
+
                     totalVotos--;
+
+                    i--;
                 }
             }
-
         }
+        
     }
 }
 
@@ -109,7 +125,6 @@ async function urnaEletronica() {
     let ganhador = true;
     let dataHoraInicial;
     let dataHoraFinal;
-    let encerraVotacao = false;
 
     let settings;
 
@@ -122,12 +137,12 @@ async function urnaEletronica() {
     dataHoraInicial = dataHoraAtual();
 
     do {
-        
+
         if (confirm('Liberar')) {
-            
+
             await votacaoCargos();
             alert('Todos os votos CONFIRMADOS');
-            
+
         } else {
 
             if (parseInt(prompt('Digite a senha')) === settings.senhaMesario) {
