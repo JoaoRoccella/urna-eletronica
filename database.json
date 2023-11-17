@@ -1,0 +1,35 @@
+{
+    "candidatos": [
+        {
+            "id": 11, 
+            "nome": "Tom Bombadil",
+            "totalVotos": 0
+        },
+        {
+            "id": 12, 
+            "nome": "Frodo Baggins",
+            "totalVotos": 0
+        },
+        {
+            "id": 13, 
+            "nome": "Samwise Gamgee",
+            "totalVotos": 0
+        },
+        {
+            "id": 14, 
+            "nome": "Pippin Took",
+            "totalVotos": 0
+        },
+        {
+            "id": 15, 
+            "nome": "Merry Brandybuck",
+            "totalVotos": 0
+        }
+
+    ],
+    "settings": [
+        {
+            "senhaMesario": 999
+        }
+    ]
+}

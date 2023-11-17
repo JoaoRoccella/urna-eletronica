@@ -1,162 +1,194 @@
-function urnaEletronica() {
+function dataHoraAtual() {
 
-    console.log('Iniciando o programa');
-    
-    verificaIntegridadeUrna();
-    
-    let 
-        opcao,
-        nomeGanhador,
-        totalVotosGanhador,
-        empate = false,
-        encerraVotacao = false,
-        contadorTotalDeVotos = 0,
-        contadorVotosCandidato1 = 0,
-        contadorVotosCandidato2 = 0,
-        contadorVotosCandidato3 = 0,
-        contadorVotosBrancos = 0,
-        contadorVotosNulos = 0;
+    const dataHora = new Date();
+    const dia = dataHora.getDate();
+    const mes = dataHora.getMonth() + 1;
+    const ano = dataHora.getFullYear();
+    const hora = dataHora.getHours();
+    const min = dataHora.getMinutes();
+    const seg = dataHora.getSeconds();
+    const ms = dataHora.getMilliseconds();
 
-    const
-        nomeCandidato1 = prompt('Digite o nome do candidato 1:'),
-        nomeCandidato2 = prompt('Digite o nome do candidato 2:'),
-        nomeCandidato3 = prompt('Digite o nome do candidato 3:');
+    return `${dia}/${mes}/${ano} ${hora}:${min}:${seg} ${ms}`;
+}
+
+async function verificaUrnaAtual() {
+
+    let hashUrnaAtual;
+    let hashValido;
+
+    await fetch('urnaEletronica.js')
+        .then(response => response.text())
+        .then(response => CryptoJS.SHA256(response).toString())
+        .then(response => hashUrnaAtual = response);
+
+    await fetch('hashValido')
+        .then(response => response.text())
+        .then(response => hashValido = response);
+
+    return {
+        hashUrnaAtual: hashUrnaAtual,
+        hashValido: hashValido,
+        status: hashUrnaAtual === hashValido
+    }
+
+}
+
+async function audioConfirmacao() {
+    const audio = new Audio('./confirmacao.mp3');
+    await audio.play();
+}
+
+// Declarando o retorno explicitamente como um objeto do tipo Promise
+// function audioConfirmacao() {
+//     return new Promise((resolve) => {
+//         const audio = new Audio('./confirmacao.mp3');
+//         audio.onended = resolve;
+//         audio.play();
+//     });
+// }
+
+async function urnaEletronica() {
+
+    // declaração de variáveis
+    let candidatos;
+    let settings;
+
+    await fetch('./database.json').then(data => data.json()).then(data => {
+        candidatos = data.candidatos;
+        settings = data.settings;
+    });
+
+    let votosBrancos = 0;
+    let votosNulos = 0;
+    let totalVotos = 0;
+
+    let voto;
+    let votoValido;
+    let ganhador = true;
+    let encerrarVotacao;
+    let dataHoraInicial;
+    let dataHoraFinal;
+
+    console.log(`Início do programa`);
+    
+    dataHoraInicial = dataHoraAtual();
+
+    document.getElementById('candidatos').innerHTML = 'Opções de voto:<br>';
+    for (let i = 0; i < candidatos.length; i++) {
+        document.getElementById('candidatos').innerHTML += `[${candidatos[i].id}] ${candidatos[i].nome}<br>`;
+    }
+    document.getElementById('candidatos').innerHTML += `[5] Voto em branco`;
 
     do {
 
-        opcao = parseInt(prompt(
-            ' | 1 | ' + nomeCandidato1 + ' \n' +
-            ' | 2 | ' + nomeCandidato2 + ' \n' +
-            ' | 3 | ' + nomeCandidato3 + ' \n' +
-            ' | 5 | Voto em branco \n' +
-            ' | 8 | Voto nulo \n' +
-            ' | 0 | Encerrar a votação \n\n' +
-            ' Digite sua opção:'
-        ));
+        votoValido = false;
 
-        contadorTotalDeVotos++;
 
-        switch (opcao) {
-            case 1:
-                console.log('Voto computado para', nomeCandidato1);
-                contadorVotosCandidato1++;
-                tocaAudioConfirmacao();
-                break;
-            case 2:
-                console.log('Voto computado para', nomeCandidato2);
-                contadorVotosCandidato2++;
-                tocaAudioConfirmacao();
-                break;
-            case 3:
-                console.log('Voto computado para', nomeCandidato3);
-                contadorVotosCandidato3++;
-                tocaAudioConfirmacao();
-                break;
-            case 5:
-                console.log('Voto em branco computado');
-                contadorVotosBrancos++;
-                tocaAudioConfirmacao();
-                break;
-            case 8:
-                console.log('Voto nulo computado');
-                contadorVotosNulos++;
-                tocaAudioConfirmacao();
-                break;
-            case 456789:
-                if (confirm('Deseja realmente encerrar a votação?')) {
-                    encerraVotacao = true;
-                    contadorTotalDeVotos--;
+        voto = parseInt(prompt('Digite sua opção de voto:'));
+
+        totalVotos++;
+
+        for (i = 0; i < candidatos.length; i++) {
+            if (voto === candidatos[i].id) {
+                if (confirm(`Candidato ${candidatos[i].nome} selecionado. CONFIRMA?`)) {
+                    await audioConfirmacao();
+                    console.log(`Votos para o candidato ${candidatos[i].nome} (parcial): ${++candidatos[i].totalVotos}`)
+                } else {
+                    alert(`Voto para o candidato ${candidatos[i].nome} cancelado, VOTE NOVAMENTE.`)
+                    totalVotos--;
                 }
+                votoValido = true;
                 break;
-            default:
-                return;
+            }
         }
 
-    } while (!encerraVotacao);
+        if (!votoValido) {
 
-    // apresentar estatísticas da votação
+            if (voto === 5) {
+                if (confirm(`Você está VOTANDO EM BRANCO. CONFIRMA?`)) {
+                    await audioConfirmacao();
+                    console.log(`Votos em branco (parcial): ${++votosBrancos}`)
+                } else {
+                    alert(`Voto em branco cancelado, VOTE NOVAMENTE.`)
+                    totalVotos--;
+                }
+            } else if (voto === 0) {
+                return; 
+            } else if (voto === settings[0].senhaMesario) {
+
+                // segundo passo de confirmação para encerrar
+                encerrarVotacao = confirm(`Deseja REALMENTE encerrar a votação?`);
+                if (encerrarVotacao) {
+                    totalVotos--;
+                }
+
+            } else {
+
+                if (confirm(`ATENÇÃO: o seu voto será ANULADO. Deseja prosseguir?`)) {
+                    await audioConfirmacao();
+                    votosNulos++;
+                } else {
+                    totalVotos--;
+                }
+            }
+
+        }
+
+    } while (!encerrarVotacao);
+    // fim do laço de votação
+
+    dataHoraFinal = dataHoraAtual();
+
+    // Saída para o usuário: boletim de urna
     console.clear();
-    console.log('**BOLETIM DE URNA**');
+    console.log(`** BOLETIM DE URNA **`);
+    console.log(`Total de votos: ${totalVotos}`);
 
-    if (contadorTotalDeVotos > 0) {
-        console.log('Total de votos:', contadorTotalDeVotos);
+    // se houver votação
+    if (totalVotos > 0) {
 
-        console.log('Total de votos do candidato ' + nomeCandidato1 + ':', contadorVotosCandidato1);
-        console.log('Percentual de votos do candidato ' + nomeCandidato1 + ':', (contadorVotosCandidato1 / contadorTotalDeVotos * 100).toFixed(2), '%');
+        for (i = 0; i < candidatos.length; i++) {
 
-        console.log('Total de votos do candidato ' + nomeCandidato2 + ':', contadorVotosCandidato2);
-        console.log('Percentual de votos do candidato ' + nomeCandidato2 + ':', (contadorVotosCandidato2 / contadorTotalDeVotos * 100).toFixed(2), '%');
+            console.log(`Total de votos do(a) candidato(a) ${candidatos[i].nome}: ${candidatos[i].totalVotos} votos (${(candidatos[i].totalVotos / totalVotos * 100).toFixed(2)}%)`);
 
-        console.log('Total de votos do candidato ' + nomeCandidato3 + ':', contadorVotosCandidato3);
-        console.log('Percentual de votos do candidato' + nomeCandidato3 + ':', (contadorVotosCandidato3 / contadorTotalDeVotos * 100).toFixed(2), '%');
-
-        console.log('Total de votos em branco:', contadorVotosBrancos);
-        console.log('Percentual de votos em branco:', (contadorVotosBrancos / contadorTotalDeVotos * 100).toFixed(2), '%');
-
-        console.log('Total de votos nulos:', contadorVotosNulos);
-        console.log('Percentual de votos nulos:', (contadorVotosNulos / contadorTotalDeVotos * 100).toFixed(2), '%');
-
-        // determinar o candidato ganhador
-        if (contadorVotosCandidato1 > contadorVotosCandidato2 && contadorVotosCandidato1 > contadorVotosCandidato3) {
-            nomeGanhador = nomeCandidato1;
-            totalVotosGanhador = contadorVotosCandidato1 + contadorVotosBrancos;
-        } else if (contadorVotosCandidato2 > contadorVotosCandidato1 && contadorVotosCandidato2 > contadorVotosCandidato3) {
-            nomeGanhador = nomeCandidato2;
-            totalVotosGanhador = contadorVotosCandidato2 + contadorVotosBrancos;
-        } else if (contadorVotosCandidato3 > contadorVotosCandidato1 && contadorVotosCandidato3 > contadorVotosCandidato2) {
-            nomeGanhador = nomeCandidato3;
-            totalVotosGanhador = contadorVotosCandidato3 + contadorVotosBrancos;
-        } else {
-            empate = true;
         }
 
-        if (!empate) {
-            console.log('Ganhador nesta urna: ' + nomeGanhador);
-            console.log('Total de votos do ganhador:', totalVotosGanhador + contadorVotosBrancos);
-            console.log('Percentual de votos do ganhador:', ((totalVotosGanhador + contadorVotosBrancos) / contadorTotalDeVotos * 100).toFixed(2) + '%');
+        console.log(`Total de votos brancos: ${votosBrancos} votos (${(votosBrancos / totalVotos * 100).toFixed(2)}%)`);
+
+        console.log(`Total de votos nulos: ${votosNulos} votos (${(votosNulos / totalVotos * 100).toFixed(2)}%)`);
+
+        // determinação do ganhador
+        candidatos.sort((a, b) => b.totalVotos - a.totalVotos);
+
+        if (candidatos[0].totalVotos === candidatos[1].totalVotos) {
+            ganhador = false;
+        }
+
+        // exibição do ganhador
+        console.log(`-------`);
+        if (ganhador) {
+            console.log(`O ganhador desta urna foi ${candidatos[0].nome} com ${candidatos[0].totalVotos} votos (${(candidatos[0].totalVotos / totalVotos * 100).toFixed(2)}%)`);
         } else {
-            console.log('Não houve ganhador nesta urna');
+            console.log(`Não houve ganhador nesta urna (empate entre 2 ou mais candidatos)`);
         }
 
     } else {
-        console.log('Nenhum voto computado nesta urna');
+        console.log(`Não houve votação  nesta urna`);
     }
 
-    verificaIntegridadeUrna();
+    console.log(`Data e hora do início da votação: ${dataHoraInicial}`);
+    console.log(`Data e hora do fim da votação: ${dataHoraFinal}`);
 
-}
-
-function tocaAudioConfirmacao() {
-    const audio = document.querySelector('#audioConfirmacao');
-
-    audio.play();
-    
-}
-
-function verificaIntegridadeUrna() {
-
-    // Gerar o hash em: https://emn178.github.io/online-tools/sha256.html
-
-    fetch('urnaEletronica.js')
-        .then(conteudo => conteudo.text())
-        .then(conteudo => CryptoJS.SHA256(conteudo).toString())
-        .then(hashCodigoUrna => {
-
-            fetch('urnaEletronica.hash')
-                .then(conteudo => conteudo.text())
-                .then(conteudo => conteudo.toLowerCase())
-                .then(hashEsperado => {
-
-                    if (hashEsperado === hashCodigoUrna) {
-                        console.log('** Hash verificado, urna íntegra **');
-                    } else {
-                        console.log('** INTEGRIDADE DO CÓDIGO COMPROMETIDA — ANULAR URNA **');
-                        console.log('Hash esperado: ' + hashEsperado);
-                        console.log('Hash da urna: ' + hashCodigoUrna);
-                    }
-                });
-
-        });
-
+    await verificaUrnaAtual().then(verificacao => {
+        if (verificacao.status) {
+            console.log('Hashes verificados, urna íntegra.');
+        } else {
+            console.log('URNA ADULTERADA, DEVE SER DESCARTADA');
+            console.log(`Hash da urna: ${verificacao.hashUrnaAtual}`);
+            console.log(`Hash esperado: ${verificacao.hashValido}`);
+        }
+        console.log('Fim do programa');
+    });
 
 }
