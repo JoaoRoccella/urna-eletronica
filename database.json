@@ -3,33 +3,184 @@
         {
             "id": 11, 
             "nome": "Tom Bombadil",
+            "idCargo": 1,
             "totalVotos": 0
         },
         {
             "id": 12, 
             "nome": "Frodo Baggins",
+            "idCargo": 1,
             "totalVotos": 0
         },
         {
             "id": 13, 
             "nome": "Samwise Gamgee",
+            "idCargo": 1,
             "totalVotos": 0
         },
         {
             "id": 14, 
             "nome": "Pippin Took",
+            "idCargo": 1,
             "totalVotos": 0
         },
         {
             "id": 15, 
             "nome": "Merry Brandybuck",
+            "idCargo": 1,
+            "totalVotos": 0
+        },
+        {
+            "id": 21, 
+            "nome": "Tom Bombadil",
+            "idCargo": 2,
+            "totalVotos": 0
+        },
+        {
+            "id": 22, 
+            "nome": "Frodo Baggins",
+            "idCargo": 2,
+            "totalVotos": 0
+        },
+        {
+            "id": 23, 
+            "nome": "Samwise Gamgee",
+            "idCargo": 2,
+            "totalVotos": 0
+        },
+        {
+            "id": 24, 
+            "nome": "Pippin Took",
+            "idCargo": 2,
+            "totalVotos": 0
+        },
+        {
+            "id": 25, 
+            "nome": "Merry Brandybuck",
+            "idCargo": 2,
+            "totalVotos": 0
+        },
+        {
+            "id": 31, 
+            "nome": "Tom Bombadil",
+            "idCargo": 3,
+            "totalVotos": 0
+        },
+        {
+            "id": 32, 
+            "nome": "Frodo Baggins",
+            "idCargo": 3,
+            "totalVotos": 0
+        },
+        {
+            "id": 33, 
+            "nome": "Samwise Gamgee",
+            "idCargo": 3,
+            "totalVotos": 0
+        },
+        {
+            "id": 34, 
+            "nome": "Pippin Took",
+            "idCargo": 3,
+            "totalVotos": 0
+        },
+        {
+            "id": 35, 
+            "nome": "Merry Brandybuck",
+            "idCargo": 3,
+            "totalVotos": 0
+        },
+        {
+            "id": 41, 
+            "nome": "Tom Bombadil",
+            "idCargo": 4,
+            "totalVotos": 0
+        },
+        {
+            "id": 42, 
+            "nome": "Frodo Baggins",
+            "idCargo": 4,
+            "totalVotos": 0
+        },
+        {
+            "id": 43, 
+            "nome": "Samwise Gamgee",
+            "idCargo": 4,
+            "totalVotos": 0
+        },
+        {
+            "id": 44, 
+            "nome": "Pippin Took",
+            "idCargo": 4,
+            "totalVotos": 0
+        },
+        {
+            "id": 45, 
+            "nome": "Merry Brandybuck",
+            "idCargo": 4,
+            "totalVotos": 0
+        },
+        {
+            "id": 51, 
+            "nome": "Tom Bombadil",
+            "idCargo": 5,
+            "totalVotos": 0
+        },
+        {
+            "id": 52, 
+            "nome": "Frodo Baggins",
+            "idCargo": 5,
+            "totalVotos": 0
+        },
+        {
+            "id": 53, 
+            "nome": "Samwise Gamgee",
+            "idCargo": 5,
+            "totalVotos": 0
+        },
+        {
+            "id": 54, 
+            "nome": "Pippin Took",
+            "idCargo": 5,
+            "totalVotos": 0
+        },
+        {
+            "id": 55, 
+            "nome": "Merry Brandybuck",
+            "idCargo": 5,
             "totalVotos": 0
         }
 
     ],
-    "settings": [
+    "cargos": [
+        {
+            "idCargo": 1,
+            "nomeCargo": "Presidente",
+            "possuiVice": true
+        },
+        {
+            "idCargo": 2,
+            "nomeCargo": "Governador",
+            "possuiVice": true
+        },
+        {
+            "idCargo": 3,
+            "nomeCargo": "Senador",
+            "possuiVice": true
+        },
+        {
+            "idCargo": 4,
+            "nomeCargo": "Deputado Federal",
+            "possuiVice": false
+        },
+        {
+            "idCargo": 5,
+            "nomeCargo": "Deputado Estadual",
+            "possuiVice": false
+        }
+    ],
+    "settings": 
         {
             "senhaMesario": 999
         }
-    ]
 }

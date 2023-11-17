@@ -39,24 +39,15 @@ async function audioConfirmacao() {
     await audio.play();
 }
 
-// Declarando o retorno explicitamente como um objeto do tipo Promise
-// function audioConfirmacao() {
-//     return new Promise((resolve) => {
-//         const audio = new Audio('./confirmacao.mp3');
-//         audio.onended = resolve;
-//         audio.play();
-//     });
-// }
-
-async function urnaEletronica() {
+async function votacaoCargos() {
 
     // declaração de variáveis
     let candidatos;
-    let settings;
+    let cargos;
 
     await fetch('./database.json').then(data => data.json()).then(data => {
         candidatos = data.candidatos;
-        settings = data.settings;
+        cargos = data.cargos;
     });
 
     let votosBrancos = 0;
@@ -65,37 +56,23 @@ async function urnaEletronica() {
 
     let voto;
     let votoValido;
-    let ganhador = true;
-    let encerrarVotacao;
-    let dataHoraInicial;
-    let dataHoraFinal;
 
-    console.log(`Início do programa`);
-    
-    dataHoraInicial = dataHoraAtual();
 
-    document.getElementById('candidatos').innerHTML = 'Opções de voto:<br>';
-    for (let i = 0; i < candidatos.length; i++) {
-        document.getElementById('candidatos').innerHTML += `[${candidatos[i].id}] ${candidatos[i].nome}<br>`;
-    }
-    document.getElementById('candidatos').innerHTML += `[5] Voto em branco`;
-
-    do {
+    for (i = 0; i < cargos.length; i++) {
 
         votoValido = false;
 
-
-        voto = parseInt(prompt('Digite sua opção de voto:'));
+        voto = parseInt(prompt(`Cargo: ${cargos[i].nomeCargo}. \nDigite sua opção de voto:`));
 
         totalVotos++;
 
-        for (i = 0; i < candidatos.length; i++) {
-            if (voto === candidatos[i].id) {
-                if (confirm(`Candidato ${candidatos[i].nome} selecionado. CONFIRMA?`)) {
+        for (j = 0; j < candidatos.length; j++) {
+            if (voto === candidatos[j].id) {
+                if (confirm(`Candidato ${candidatos[j].nome} selecionado. CONFIRMA?`)) {
                     await audioConfirmacao();
-                    console.log(`Votos para o candidato ${candidatos[i].nome} (parcial): ${++candidatos[i].totalVotos}`)
+                    console.log(`Votos para o candidato ${candidatos[j].nome} (parcial): ${++candidatos[j].totalVotos}`)
                 } else {
-                    alert(`Voto para o candidato ${candidatos[i].nome} cancelado, VOTE NOVAMENTE.`)
+                    alert(`Voto para o candidato ${candidatos[j].nome} cancelado, VOTE NOVAMENTE.`)
                     totalVotos--;
                 }
                 votoValido = true;
@@ -113,16 +90,6 @@ async function urnaEletronica() {
                     alert(`Voto em branco cancelado, VOTE NOVAMENTE.`)
                     totalVotos--;
                 }
-            } else if (voto === 0) {
-                return; 
-            } else if (voto === settings[0].senhaMesario) {
-
-                // segundo passo de confirmação para encerrar
-                encerrarVotacao = confirm(`Deseja REALMENTE encerrar a votação?`);
-                if (encerrarVotacao) {
-                    totalVotos--;
-                }
-
             } else {
 
                 if (confirm(`ATENÇÃO: o seu voto será ANULADO. Deseja prosseguir?`)) {
@@ -134,9 +101,43 @@ async function urnaEletronica() {
             }
 
         }
+    }
+}
 
-    } while (!encerrarVotacao);
-    // fim do laço de votação
+async function urnaEletronica() {
+
+    let ganhador = true;
+    let dataHoraInicial;
+    let dataHoraFinal;
+    let encerraVotacao = false;
+
+    let settings;
+
+    await fetch('./database.json').then(data => data.json()).then(data => {
+        settings = data.settings;
+    });
+
+    console.log(`Início do programa`);
+
+    dataHoraInicial = dataHoraAtual();
+
+    do {
+        
+        if (confirm('Liberar')) {
+            
+            await votacaoCargos();
+            alert('Todos os votos CONFIRMADOS');
+            
+        } else {
+
+            if (parseInt(prompt('Digite a senha')) === settings.senhaMesario) {
+                break;
+            }
+
+        }
+
+    } while (true);
+
 
     dataHoraFinal = dataHoraAtual();
 
