@@ -1,15 +1,199 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" href="./assets/images/favicon.svg" type="image/x-icon">
+    <link rel="shortcut icon" href="./images/favicon.svg" type="image/x-icon">
     <title>Urna Eletrônica</title>
-    <script src="./assets/scripts/urnaEletronica.js"></script>
 </head>
+
 <body>
-    <button type="button" onclick="urnaEletronica()">Começar</button>
-    <button type="button" onclick="audioConfirmacao()">Testar audio</button>
+    <h1>Urna Eletrônica em JavaScript</h1>
+
+    <div>
+        <h2>Candidatos</h2>
+        <ul>
+            <li>11 - João</li>
+            <li>12 - Edgard</li>
+        </ul>
+
+        <p>Senha do mesário: 1234</p>
+    </div>
+
+    <section id="urna">
+
+        <output id="tela_eleitor">
+            <div id="candidato">
+                <h2 id="numero">▯▯</h2>
+                <h2 id="nomeCandidato">Nome do candidato</h2>
+                <p id="partido">Partido</p>
+            </div>
+        </output>
+
+        <div id="teclado_urna">
+            <div class="numerico">
+                <button type="button" id="bt_e1">1</button>
+                <button type="button" id="bt_e2">2</button>
+                <button type="button" id="bt_e3">3</button>
+                <button type="button" id="bt_e4">4</button>
+                <button type="button" id="bt_e5">5</button>
+                <button type="button" id="bt_e6">6</button>
+                <button type="button" id="bt_e7">7</button>
+                <button type="button" id="bt_e8">8</button>
+                <button type="button" id="bt_e9">9</button>
+                <button type="button" id="bt_e0">0</button>
+            </div>
+
+            <button type="button" id="bt_eBranco">BRANCO</button>
+            <button type="button" id="bt_eCorrige">CORRIGE</button>
+            <button type="button" id="bt_eConfirma">CONFIRMA</button>
+        </div>
+
+    </section>
+
+    <section id="terminal">
+        <h2>Terminal do mesário</h2>
+
+
+        <output id="visor_mesario">
+            <p>Digite a senha para iniciar a votação</p>
+        </output>
+
+
+        <div id="teclado_mesario">
+            <div class="numerico">
+                <button type="button" id="bt_m1">1</button>
+                <button type="button" id="bt_m2">2</button>
+                <button type="button" id="bt_m3">3</button>
+                <button type="button" id="bt_m4">4</button>
+                <button type="button" id="bt_m5">5</button>
+                <button type="button" id="bt_m6">6</button>
+                <button type="button" id="bt_m7">7</button>
+                <button type="button" id="bt_m8">8</button>
+                <button type="button" id="bt_m9">9</button>
+                <button type="button" id="bt_m0">0</button>
+            </div>
+
+            <button type="button" id="bt_mCorrige">CORRIGE</button>
+            <button type="button" id="bt_mConfirma">CONFIRMA</button>
+        </div>
+
+
+        <div id="indicadores">
+            <div>🔋
+                <input type="range" id="bateria"></input>
+            </div>
+            <div>
+                <label for="out_seguranca">Segurança</label>
+                <output id="out_seguranca">🔴</output>
+            </div>
+            <div>
+                <label for="out_bateria_interna">Bateria interna</label>
+                <output id="out_bateria_interna">⚪</output>
+            </div>
+            <div>
+                <label for="out_aguarde">Aguarde</label>
+                <output id="out_aguarde">⚪</output>
+            </div>
+            <div>
+                <label for="out_liberado">Liberado</label>
+                <output id="out_liberado">⚪</output>
+            </div>
+            <div id="aguarde"></div>
+            <div id="liberado"></div>
+        </div>
+    </section>
+
+    <script src="./scripts/urnaEletronica.js"></script>
+    <script>
+
+        let votoDigitado = "";
+
+        // leitura do teclado da urna
+        document.querySelector('#teclado_urna').addEventListener('click', event => {
+            if (event.target.closest('.numerico') && votacaoLiberada) {
+
+                if (votoDigitado.length < 2) {
+                    votoDigitado += event.target.innerHTML;
+                    document.querySelector('#numero').innerHTML = votoDigitado;
+                    console.log(votoDigitado);
+                }
+
+                if (votoDigitado.length == 2) {
+                    if (verificaCandidato(votoDigitado)) {
+                        document.querySelector('#nomeCandidato').innerHTML = candidatos[votoDigitado].nome;
+                        document.querySelector('#partido').innerHTML = candidatos[votoDigitado].partido;
+                        document.querySelector('#numero').innerHTML = votoDigitado;
+                    } else {
+                        document.querySelector('#nomeCandidato').innerHTML = "Número inválido. Anular voto?";
+                    }
+                }
+
+            }
+
+            if (event.target.id == "bt_eCorrige" && votacaoLiberada) {
+                if (votoDigitado.length > 0) {
+                    votoDigitado = "";
+                    document.querySelector('#nomeCandidato').innerHTML = 'Nome do candidato';
+                    document.querySelector('#partido').innerHTML = 'Partido';
+                    document.querySelector('#numero').innerHTML = '▯▯';
+                }
+                console.log('CORRIGE pressionado');
+            }
+
+            if (event.target.id == "bt_eConfirma" && votacaoLiberada) {
+                if (votoDigitado.length == 2) {
+                    if (computaVoto(votoDigitado))
+                        document.querySelector('output#tela_eleitor').innerHTML = '<h2>FIM</h2>';
+                }
+                console.log('CONFIRMA pressionado');
+            }
+
+            document.querySelector('#teclado_mesario').addEventListener('click', event => {
+                if (event.target.id == 'bt_mConfirma' && votacaoFinalizada) {
+
+                    // <div id="candidato">
+                    //     <h2 id="numero">▯▯</h2>
+                    //     <h2 id="nomeCandidato">Nome do Candidato</h2>
+                    //     <p id="partido">Partido</p>
+                    // </div>
+                    
+                    liberaVotacao();
+                    
+                    let tela_eleitor = document.querySelector('#tela_eleitor');
+                    tela_eleitor.innerHTML = "";
+
+                    let divCandidato = document.createElement('div');
+                    divCandidato.id = "candidato";
+
+                    let divNomeCandidato = document.createElement('h2');
+                    divNomeCandidato.id = "nomeCandidato";
+                    divNomeCandidato.innerHTML = "Nome do candidato";
+
+                    let divPartidoCandidato = document.createElement('p');
+                    divPartidoCandidato.id = "partido";
+                    divPartidoCandidato.innerHTML = "Partido";
+
+                    let divNumeroCandidato = document.createElement('h2');
+                    divNumeroCandidato.id = "numero";
+                    divNumeroCandidato.innerHTML = "▯▯";
+
+                    divCandidato.append(divNumeroCandidato, divNomeCandidato, divPartidoCandidato);
+                    tela_eleitor.append(divCandidato);
+
+
+                }
+            });
+
+        });
+
+
+
+
+
+    </script>
 </body>
+
 </html>
