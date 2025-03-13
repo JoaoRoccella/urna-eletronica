@@ -251,7 +251,7 @@ function audioConfirmacao() {
 
     setTimeout(() => {
         audio.pause();
-    }, 500);
+    }, 500); // duração do audio
 }
 
 function usuarioCancelou(leituraPrompt) {
